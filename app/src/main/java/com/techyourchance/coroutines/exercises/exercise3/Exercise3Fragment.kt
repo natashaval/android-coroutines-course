@@ -29,7 +29,7 @@ class Exercise3Fragment : BaseFragment() {
 
     private lateinit var getReputationEndpoint: GetReputationEndpoint
 
-    private var job: Job? = null
+    private var jobElapsedTime: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +55,15 @@ class Exercise3Fragment : BaseFragment() {
         btnGetReputation = view.findViewById(R.id.btn_get_reputation)
         btnGetReputation.setOnClickListener {
             logThreadInfo("button callback")
-            job = coroutineScope.launch {
+
+            jobElapsedTime = coroutineScope.launch {
+                updateElapsedTime()
+            }
+
+            coroutineScope.launch {
                 btnGetReputation.isEnabled = false
                 val reputation = getReputationForUser(edtUserId.text.toString())
+                jobElapsedTime?.cancel()
                 Toast.makeText(requireContext(), "reputation: $reputation", Toast.LENGTH_SHORT).show()
                 btnGetReputation.isEnabled = true
             }
@@ -68,7 +74,7 @@ class Exercise3Fragment : BaseFragment() {
 
     override fun onStop() {
         super.onStop()
-        job?.cancel()
+        coroutineScope.coroutineContext.cancelChildren()
         btnGetReputation.isEnabled = true
     }
 
@@ -81,6 +87,15 @@ class Exercise3Fragment : BaseFragment() {
 
     private fun logThreadInfo(message: String) {
         ThreadInfoLogger.logThreadInfo(message)
+    }
+
+    private suspend fun updateElapsedTime() {
+        val startTime = System.currentTimeMillis()
+        while (true) {
+            delay(100)
+            val endTime = System.currentTimeMillis()
+            txtElapsedTime.text = "Elapsed time: ${endTime - startTime} ms"
+        }
     }
 
     companion object {
