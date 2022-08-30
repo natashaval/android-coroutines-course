@@ -5,7 +5,7 @@ import com.techyourchance.coroutines.exercises.exercise1.GetReputationEndpoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class GetReputationUseCase(private val getReputationEndpoint: GetReputationEndpoint) {
+class GetReputationSolutionUseCase(private val getReputationEndpoint: GetReputationEndpoint) {
 
     suspend fun getReputationForUser(userId: String): Int {
         return withContext(Dispatchers.Default) {

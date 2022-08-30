@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import com.techyourchance.coroutines.R
 import com.techyourchance.coroutines.common.BaseFragment
 import com.techyourchance.coroutines.common.ThreadInfoLogger
-import com.techyourchance.coroutines.exercises.exercise1.GetReputationEndpoint
 import com.techyourchance.coroutines.home.ScreenReachableFromHome
 import kotlinx.coroutines.*
 
@@ -22,7 +21,7 @@ class Exercise5SolutionFragment : BaseFragment() {
 
     override val screenTitle get() = ScreenReachableFromHome.EXERCISE_5.description
 
-    private lateinit var getReputationUseCase: GetReputationUseCase
+    private lateinit var getReputationSolutionUseCase: GetReputationSolutionUseCase
 
     private lateinit var edtUserId: EditText
     private lateinit var btnGetReputation: Button
@@ -32,7 +31,7 @@ class Exercise5SolutionFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getReputationUseCase = compositionRoot.getReputationUseCase
+        getReputationSolutionUseCase = compositionRoot.getReputationSolutionUseCase
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,7 +55,7 @@ class Exercise5SolutionFragment : BaseFragment() {
             logThreadInfo("button callback")
             job = coroutineScope.launch {
                 btnGetReputation.isEnabled = false
-                val reputation = getReputationUseCase.getReputationForUser(edtUserId.text.toString())
+                val reputation = getReputationSolutionUseCase.getReputationForUser(edtUserId.text.toString())
                 Toast.makeText(requireContext(), "reputation: $reputation", Toast.LENGTH_SHORT).show()
                 btnGetReputation.isEnabled = true
             }
